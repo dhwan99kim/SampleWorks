@@ -6,9 +6,12 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.sophism.sampleapp.fragments.FragmentFlashSample;
 import com.sophism.sampleapp.fragments.FragmentLoginSample;
 import com.sophism.sampleapp.fragments.FragmentRetrofitSample;
 
@@ -26,11 +29,19 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
+        ImageView menu_btn = (ImageView) findViewById(R.id.menu_btn);
+        menu_btn.setOnClickListener(this);
+
         TextView menu_item_retrofit = (TextView) findViewById(R.id.menu_item_retrofit);
         menu_item_retrofit.setOnClickListener(this);
 
         TextView menu_item_login = (TextView) findViewById(R.id.menu_item_login);
         menu_item_login.setOnClickListener(this);
+
+        TextView menu_item_flash = (TextView) findViewById(R.id.menu_item_flash);
+        menu_item_flash.setOnClickListener(this);
+
+
 
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
@@ -41,21 +52,29 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
+
         switch(v.getId()) {
+            case R.id.menu_btn:
+                mDrawerLayout.openDrawer(Gravity.LEFT);
+                break;
             case R.id.menu_item_retrofit:
-                mDrawerLayout.closeDrawers();
-                mFragment = new FragmentRetrofitSample();
-                ft.replace(R.id.content_frame, mFragment);
-                ft.commit();
+                changeFragmentFromSideMenu(new FragmentRetrofitSample());
                 break;
             case R.id.menu_item_login:
-                mDrawerLayout.closeDrawers();
-                mFragment = new FragmentLoginSample();
-                ft.replace(R.id.content_frame, mFragment);
-                ft.commit();
+                changeFragmentFromSideMenu(new FragmentLoginSample());
+                break;
+            case R.id.menu_item_flash:
+                changeFragmentFromSideMenu(new FragmentFlashSample());
                 break;
         }
+    }
+
+    public void changeFragmentFromSideMenu(Fragment fragment){
+        mDrawerLayout.closeDrawers();
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        mFragment = fragment;
+        ft.replace(R.id.content_frame, mFragment);
+        ft.commit();
     }
 }

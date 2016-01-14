@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/sample_title_text"
+        android:text="Flash Sample"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/sample_label_text"
+                android:text="플래쉬 제어"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <Button
+                    android:id="@+id/flash_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/sample_label_text"
+                    android:text="ON"/>
+                <Button
+                    android:id="@+id/flash_off"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/sample_label_text"
+                    android:text="OFF"/>
+            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                style="@style/sample_label_text"
+                android:text="플래쉬 깜빡이기"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <Button
+                    android:id="@+id/flash_blink_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/sample_label_text"
+                    android:text="BLINK ON"/>
+                <Button
+                    android:id="@+id/flash_blink_off"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/sample_label_text"
+                    android:text="BLINK OFF"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

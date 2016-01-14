@@ -34,7 +34,7 @@
         </LinearLayout>
         <com.nhn.android.naverlogin.ui.view.OAuthLoginButton
             android:id="@+id/buttonOAuthLoginImg"
-            android:layout_width="wrap_content"
+            android:layout_width="230dp"
             android:layout_height="50dp" />
     </LinearLayout>
 </LinearLayout>
