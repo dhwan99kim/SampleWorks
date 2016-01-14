@@ -33,5 +33,12 @@
             android:layout_height="wrap_content"
             style="@style/side_menu_item_text"
             android:text="Retrofit Sample"/>
+
+        <TextView
+            android:id="@+id/menu_item_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/side_menu_item_text"
+            android:text="Login Sample"/>
     </LinearLayout>
 </android.support.v4.widget.DrawerLayout>
