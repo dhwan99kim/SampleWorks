@@ -2,6 +2,7 @@ package com.sophism.sampleapp;
 
 import android.app.Application;
 import android.content.Context;
+import android.provider.Settings;
 import android.util.Log;
 
 import com.parse.Parse;
@@ -25,7 +26,9 @@ public class SampleApplication extends Application{
 
     public void init(){
         Parse.initialize(this, AppDefine.PARSE_APP_ID, AppDefine.PARSE_CLIENT_KEY);
-        ParseInstallation.getCurrentInstallation().saveInBackground();
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.add("device_id", "sophism");
+        installation.saveInBackground();
     }
 
 

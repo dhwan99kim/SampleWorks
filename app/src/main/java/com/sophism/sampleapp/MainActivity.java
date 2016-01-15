@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.sophism.sampleapp.fragments.FragmentFlashSample;
 import com.sophism.sampleapp.fragments.FragmentLoginSample;
+import com.sophism.sampleapp.fragments.FragmentMain;
 import com.sophism.sampleapp.fragments.FragmentRetrofitSample;
 
 /**
@@ -45,7 +46,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        mFragment = new FragmentLoginSample();
+        mFragment = new FragmentMain();
         ft.replace(R.id.content_frame, mFragment);
         ft.commit();
     }
