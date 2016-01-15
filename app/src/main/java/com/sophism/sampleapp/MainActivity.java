@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.sophism.sampleapp.fragments.FragmentFlashSample;
 import com.sophism.sampleapp.fragments.FragmentLoginSample;
-import com.sophism.sampleapp.fragments.FragmentMain;
+import com.sophism.sampleapp.fragments.FragmentParseSample;
 import com.sophism.sampleapp.fragments.FragmentRetrofitSample;
 
 /**
@@ -42,11 +42,12 @@ public class MainActivity extends Activity implements View.OnClickListener{
         TextView menu_item_flash = (TextView) findViewById(R.id.menu_item_flash);
         menu_item_flash.setOnClickListener(this);
 
-
+        TextView menu_item_main = (TextView) findViewById(R.id.menu_item_main);
+        menu_item_main.setOnClickListener(this);
 
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        mFragment = new FragmentMain();
+        mFragment = new FragmentParseSample();
         ft.replace(R.id.content_frame, mFragment);
         ft.commit();
     }
@@ -66,6 +67,9 @@ public class MainActivity extends Activity implements View.OnClickListener{
                 break;
             case R.id.menu_item_flash:
                 changeFragmentFromSideMenu(new FragmentFlashSample());
+                break;
+            case R.id.menu_item_main:
+                changeFragmentFromSideMenu(new FragmentParseSample());
                 break;
         }
     }

@@ -39,6 +39,13 @@
             android:text="메뉴"/>
         <!-- Menu Items -->
         <TextView
+            android:id="@+id/menu_item_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/side_menu_item_text"
+            android:text="Main Fragment"/>
+
+        <TextView
             android:id="@+id/menu_item_retrofit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
