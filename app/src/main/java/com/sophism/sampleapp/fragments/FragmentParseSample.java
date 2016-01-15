@@ -33,7 +33,7 @@ public class FragmentParseSample extends Fragment implements View.OnClickListene
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle instance) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_main, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_parse_sample, container, false);
 
         Button parse_push_all = (Button) rootView.findViewById(R.id.parse_push_all);
         parse_push_all.setOnClickListener(this);

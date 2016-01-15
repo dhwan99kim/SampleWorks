@@ -17,6 +17,7 @@ import com.nhn.android.naverlogin.OAuthLoginHandler;
 import com.nhn.android.naverlogin.ui.view.OAuthLoginButton;
 import com.sophism.sampleapp.AppDefine;
 import com.sophism.sampleapp.R;
+import com.sophism.sampleapp.dialogs.DialogSignInSample;
 
 /**
  * Created by D.H.KIM on 2016. 1. 14.
@@ -41,6 +42,10 @@ public class FragmentLoginSample extends Fragment implements View.OnClickListene
         mOAuthLoginButton.setOAuthLoginHandler(mOAuthLoginHandler);
         OAuthLoginDefine.DEVELOPER_VERSION = true;
         textview_login_state = (TextView) rootView.findViewById(R.id.textview_login_state);
+
+        TextView sign_in_btn = (TextView) rootView.findViewById(R.id.sign_in_btn);
+        sign_in_btn.setOnClickListener(this);
+
         return rootView;
     }
 
@@ -73,7 +78,12 @@ public class FragmentLoginSample extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()){
+            case R.id.sign_in_btn:
+                DialogSignInSample dialog = new DialogSignInSample(mContext);
+                dialog.show();
+                break;
+        }
     }
 }
 

@@ -24,7 +24,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class AppUtil {
 
 
-    public static String AES_KEY = "qwerty12345";
+    public static String AES_KEY = "qwerty1234567890";
     public static byte[] ivBytes = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 
