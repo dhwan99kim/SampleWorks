@@ -33,7 +33,7 @@ public class FragmentFlashSample extends Fragment implements View.OnClickListene
     private Button flash_blink_on;
     private Button flash_blink_off;
 
-    boolean isFlashon;
+    boolean isFlashOn;
     Handler mHandler;
     public FragmentFlashSample(){
 
@@ -95,8 +95,12 @@ public class FragmentFlashSample extends Fragment implements View.OnClickListene
 
     private void turnOffFlash(){
         if (checkFlashAvailable()) {
-            mCamera.stopPreview();
-            mCamera.release();
+            try {
+                mCamera.stopPreview();
+                mCamera.release();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
@@ -104,9 +108,12 @@ public class FragmentFlashSample extends Fragment implements View.OnClickListene
 
     private void blinkFlashOff(){
         if (mHandler != null) {
+            mHandler.sendEmptyMessage(TURN_OFF);
             mHandler.removeCallbacks(toggleFlash);
             mHandler = null;
         }
+        turnOffFlash();
+        isFlashOn = false;
     }
     private void blinkFlash(){
         mHandler = new Handler(){
@@ -125,15 +132,15 @@ public class FragmentFlashSample extends Fragment implements View.OnClickListene
 
     private Runnable toggleFlash = new Runnable() {
         public void run() {
-            if(isFlashon)
+            if(isFlashOn)
             {
                 mHandler.sendEmptyMessage(TURN_OFF);
-                isFlashon=false;
+                isFlashOn=false;
             }
             else
             {
                 mHandler.sendEmptyMessage(TURN_ON);
-                isFlashon=true;
+                isFlashOn=true;
             }
             mHandler.postDelayed(this, 200);
         }
