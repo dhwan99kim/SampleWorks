@@ -59,7 +59,7 @@ public class DialogSignInSample extends Dialog{
                             if (e != null) {
                                 signIn();
                             } else {
-                                Toast.makeText(mContext,"존재하는 ID입다",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext,"존재하는 ID입니다",Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

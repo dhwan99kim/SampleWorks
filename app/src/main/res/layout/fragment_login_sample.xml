@@ -55,6 +55,14 @@
                     android:inputType="textPassword"
                     android:background="@drawable/edittext_bg"/>
             </LinearLayout>
+            <Button
+                android:id="@+id/log_in_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/btn_color_blue"
+                android:textColor="@color/white"
+                android:text="LOGIN"/>
             <TextView
                 android:id="@+id/sign_in_btn"
                 android:layout_width="match_parent"

@@ -15,7 +15,12 @@ import com.nhn.android.naverlogin.OAuthLogin;
 import com.nhn.android.naverlogin.OAuthLoginDefine;
 import com.nhn.android.naverlogin.OAuthLoginHandler;
 import com.nhn.android.naverlogin.ui.view.OAuthLoginButton;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.sophism.sampleapp.AppDefine;
+import com.sophism.sampleapp.AppUtil;
 import com.sophism.sampleapp.R;
 import com.sophism.sampleapp.dialogs.DialogSignInSample;
 
@@ -28,7 +33,8 @@ public class FragmentLoginSample extends Fragment implements View.OnClickListene
     private static OAuthLogin mOAuthLoginInstance;
     private static TextView textview_login_state;
     private OAuthLoginButton mOAuthLoginButton;
-
+    private EditText mEditTextID;
+    private EditText mEditTextPW;
     public FragmentLoginSample(){
 
     }
@@ -46,6 +52,11 @@ public class FragmentLoginSample extends Fragment implements View.OnClickListene
         TextView sign_in_btn = (TextView) rootView.findViewById(R.id.sign_in_btn);
         sign_in_btn.setOnClickListener(this);
 
+        mEditTextID = (EditText) rootView.findViewById(R.id.edittext_id);
+        mEditTextPW = (EditText) rootView.findViewById(R.id.edittext_pw);
+
+        Button log_in_button = (Button) rootView.findViewById(R.id.log_in_button);
+        log_in_button.setOnClickListener(this);
         return rootView;
     }
 
@@ -83,7 +94,44 @@ public class FragmentLoginSample extends Fragment implements View.OnClickListene
                 DialogSignInSample dialog = new DialogSignInSample(mContext);
                 dialog.show();
                 break;
+
+            case R.id.log_in_button:
+                LoginWithParse();
+                break;
+
         }
+    }
+
+    private void LoginWithParse(){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
+        query.whereEqualTo("username", mEditTextID.getText().toString());
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                if (e != null) {
+                    Toast.makeText(mContext,"존재하지 않는 ID입니다",Toast.LENGTH_SHORT).show();
+                } else {
+                    try {
+                        ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
+                        query.whereEqualTo("username", mEditTextID.getText().toString());
+                        query.whereEqualTo("password", AppUtil.AES_Encode(mEditTextPW.getText().toString(), AppUtil.AES_KEY));
+                        query.getFirstInBackground(new GetCallback<ParseObject>() {
+                            @Override
+                            public void done(ParseObject object, ParseException e) {
+                                if (e != null) {
+                                    Toast.makeText(mContext, "비밀번호가 틀렸습니다", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(mContext, "로그인 되었습니다", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }catch (Exception e2){
+                        e2.printStackTrace();
+                        Toast.makeText(mContext, "비밀번호가 틀렸습니다", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
     }
 }
 
