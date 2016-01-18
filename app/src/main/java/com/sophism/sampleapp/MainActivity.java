@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sophism.sampleapp.fragments.FragmentBoardSample;
+import com.sophism.sampleapp.fragments.FragmentChatSample;
 import com.sophism.sampleapp.fragments.FragmentFlashSample;
 import com.sophism.sampleapp.fragments.FragmentLoginSample;
 import com.sophism.sampleapp.fragments.FragmentParseSample;
@@ -49,6 +50,9 @@ public class MainActivity extends Activity implements View.OnClickListener{
         TextView menu_item_board = (TextView) findViewById(R.id.menu_item_board);
         menu_item_board.setOnClickListener(this);
 
+        TextView menu_item_chat = (TextView) findViewById(R.id.menu_item_chat);
+        menu_item_chat.setOnClickListener(this);
+
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         mFragment = new FragmentParseSample();
@@ -78,6 +82,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
             case R.id.menu_item_board:
                 changeFragmentFromSideMenu(new FragmentBoardSample());
                 break;
+            case R.id.menu_item_chat:
+                changeFragmentFromSideMenu(new FragmentChatSample());
         }
     }
 

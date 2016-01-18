@@ -16,4 +16,6 @@ public class AppDefine {
     public static final String PARSE_APP_ID = "I8RbwKXqiwLpw6JaWRa37fjt7KuuG8skAAGLe5Hj";		//Parse.com Appplication Key
     public static final String PARSE_CLIENT_KEY = "8jPBDTHJTFiezFk322d842QBfrdCDgRqSJdjkAEJ";	//Parse.com Client Key
 
+    //Chat Server
+    public static final String CHAT_SERVER_URL = "http://chat.socket.io";
 }

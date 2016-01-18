@@ -72,5 +72,12 @@
             android:layout_height="wrap_content"
             style="@style/side_menu_item_text"
             android:text="Flash Sample"/>
+
+        <TextView
+            android:id="@+id/menu_item_chat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/side_menu_item_text"
+            android:text="Chat Sample"/>
     </LinearLayout>
 </android.support.v4.widget.DrawerLayout>
