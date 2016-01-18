@@ -14,7 +14,7 @@
             android:layout_height="24dp"
             android:layout_gravity="left|center_vertical"
             android:layout_marginLeft="16dp"
-            android:src="@drawable/sub_back"/>
+            android:src="@drawable/back_ico"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
