@@ -7,18 +7,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.sophism.sampleapp.R;
 import com.sophism.sampleapp.data.BoardArticleData;
+import com.sophism.sampleapp.dialogs.DialogBoardRegister;
 
 import java.util.ArrayList;
 
 /**
  * Created by D.H.KIM on 2016. 1. 16.
  */
-public class FragmentBoardSample extends Fragment {
+public class FragmentBoardSample extends Fragment implements View.OnClickListener{
 
     ArrayList<BoardArticleData> mBoardArticles = new ArrayList<>();
     BoardListAdapter mAdapter;
@@ -36,9 +39,22 @@ public class FragmentBoardSample extends Fragment {
         mBoardListView = (ListView)rootView.findViewById(R.id.listview_board);
         mAdapter = new BoardListAdapter(mContext);
         mBoardListView.setAdapter(mAdapter);
+        Button btn_write = (Button)rootView.findViewById(R.id.btn_write);
+        btn_write.setOnClickListener(this);
 
         updateBoardArticle();
+
         return rootView;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.btn_write:
+                DialogBoardRegister dialog = new DialogBoardRegister(mContext);
+                dialog.show();
+                break;
+        }
     }
 
     private void updateBoardArticle(){
