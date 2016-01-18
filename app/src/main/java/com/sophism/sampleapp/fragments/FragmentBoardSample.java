@@ -11,12 +11,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.sophism.sampleapp.R;
 import com.sophism.sampleapp.data.BoardArticleData;
 import com.sophism.sampleapp.dialogs.DialogBoardRegister;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by D.H.KIM on 2016. 1. 16.
@@ -58,9 +65,30 @@ public class FragmentBoardSample extends Fragment implements View.OnClickListene
     }
 
     private void updateBoardArticle(){
-        if (mBoardArticles.size() == 0){
-            mBoardListView.setVisibility(View.GONE);
-        }
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Board");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                mBoardArticles = new ArrayList<>();
+                if (e != null) {
+                    mBoardListView.setVisibility(View.GONE);
+                    mAdapter.notifyDataSetChanged();
+                } else {
+                    mBoardListView.setVisibility(View.VISIBLE);
+                    for (ParseObject object:objects){
+                        BoardArticleData data = new BoardArticleData();
+                        data.setArticle((String)object.get("article"));
+                        data.setAuthor((String)object.get("author"));
+                        data.setTitle((String)object.get("title"));
+                        data.setDate((String)object.get("date"));
+                        mBoardArticles.add(data);
+                    }
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+
     }
     private class BoardListAdapter extends BaseAdapter{
         private LayoutInflater mInflater;
@@ -94,6 +122,7 @@ public class FragmentBoardSample extends Fragment implements View.OnClickListene
                 holder.board_article_author = (TextView) convertView.findViewById(R.id.board_article_author);
                 holder.board_article_date = (TextView) convertView.findViewById(R.id.board_article_date);
                 holder.board_article_article = (TextView) convertView.findViewById(R.id.board_article_article);
+                convertView.setTag(holder);
             }else {
                 holder = (ViewHolder) convertView.getTag();
             }
