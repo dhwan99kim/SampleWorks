@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/board_article_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/sample_label_text"
+        android:layout_alignParentLeft="true"
+        android:text="Title"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        <TextView
+            android:id="@+id/board_article_author"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            style="@style/sample_normal_text"
+            android:text="Author"/>
+        <TextView
+            android:id="@+id/board_article_date"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            style="@style/sample_normal_text"
+            android:layout_alignParentRight="true"
+            android:text="Date"/>
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/board_article_article"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/sample_normal_text"
+        android:layout_alignParentLeft="true"
+        android:text="Article"/>
+</LinearLayout>
