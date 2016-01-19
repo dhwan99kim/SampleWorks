@@ -147,7 +147,7 @@ public class FragmentFlashSample extends Fragment implements View.OnClickListene
         if (mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH))
             return true;
         else{
-            Toast.makeText(mContext, "Flash is not available", Toast.LENGTH_SHORT);
+            Toast.makeText(mContext, "Flash is not available", Toast.LENGTH_SHORT).show();
             return false;
         }
     }

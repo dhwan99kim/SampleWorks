@@ -32,7 +32,6 @@ public class FragmentLoginSample extends Fragment implements View.OnClickListene
     private static Context mContext;
     private static OAuthLogin mOAuthLoginInstance;
     private static TextView textview_login_state;
-    private OAuthLoginButton mOAuthLoginButton;
     private EditText mEditTextID;
     private EditText mEditTextPW;
     public FragmentLoginSample(){
@@ -44,7 +43,7 @@ public class FragmentLoginSample extends Fragment implements View.OnClickListene
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_login_sample, container, false);
         mContext = getActivity();
         initData();
-        mOAuthLoginButton = (OAuthLoginButton) rootView.findViewById(R.id.buttonOAuthLoginImg);
+        OAuthLoginButton mOAuthLoginButton = (OAuthLoginButton) rootView.findViewById(R.id.buttonOAuthLoginImg);
         mOAuthLoginButton.setOAuthLoginHandler(mOAuthLoginHandler);
         OAuthLoginDefine.DEVELOPER_VERSION = true;
         textview_login_state = (TextView) rootView.findViewById(R.id.textview_login_state);

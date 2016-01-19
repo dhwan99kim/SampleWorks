@@ -78,7 +78,7 @@ public class FragmentRetrofitSample extends Fragment implements View.OnClickList
                 }
             });
         }catch (Exception e){
-
+            e.printStackTrace();
         }
 
 

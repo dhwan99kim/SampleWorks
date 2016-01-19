@@ -1,6 +1,5 @@
 package com.sophism.sampleapp.fragments;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -40,8 +39,6 @@ import java.util.List;
  */
 public class FragmentChatSample extends Fragment {
 
-    private static final int REQUEST_LOGIN = 0;
-
     private static final int TYPING_TIMER_LENGTH = 600;
 
     private RecyclerView mMessagesView;
@@ -63,14 +60,19 @@ public class FragmentChatSample extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_sample, container, false);
-        return rootView;
+        return inflater.inflate(R.layout.fragment_chat_sample, container, false);
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mAdapter = new MessageAdapter(activity, mMessages);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mAdapter = new MessageAdapter(context, mMessages);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        leave();
     }
 
     @Override
