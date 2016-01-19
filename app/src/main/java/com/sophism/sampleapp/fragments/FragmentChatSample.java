@@ -1,5 +1,6 @@
 package com.sophism.sampleapp.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -67,6 +68,12 @@ public class FragmentChatSample extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mAdapter = new MessageAdapter(context, mMessages);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mAdapter = new MessageAdapter(activity, mMessages);
     }
 
     @Override
