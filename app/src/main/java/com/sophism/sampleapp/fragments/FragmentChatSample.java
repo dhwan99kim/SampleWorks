@@ -98,6 +98,7 @@ public class FragmentChatSample extends Fragment {
         mSocket.connect();
 
         mSocket.emit("add user", mUsername);
+        mSocket.emit("join","room1");
     }
 
     @Override
@@ -203,7 +204,7 @@ public class FragmentChatSample extends Fragment {
         addMessage(mUsername, message);
 
         // perform the sending message attempt.
-        mSocket.emit("new message", message);
+        mSocket.emit("new message", message, "room1");
     }
 
     private void leave() {
