@@ -1,7 +1,13 @@
 package com.sophism.sampleapp;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.media.ExifInterface;
 import android.util.Base64;
 
@@ -42,7 +48,7 @@ public class AppUtil {
 
     public static String AES_Decode(String str, String key)	throws java.io.UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
 
-        byte[] textBytes =Base64.decode(str,0);
+        byte[] textBytes =Base64.decode(str, 0);
         AlgorithmParameterSpec ivSpec = new IvParameterSpec(ivBytes);
         SecretKeySpec newKey = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
@@ -81,5 +87,26 @@ public class AppUtil {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    }
+
+    public static Bitmap getRoundedCroppedBitmap(Bitmap bitmap) {
+        int widthLight = bitmap.getWidth();
+        int heightLight = bitmap.getHeight();
+
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(output);
+        Paint paintColor = new Paint();
+        paintColor.setFlags(Paint.ANTI_ALIAS_FLAG);
+
+        RectF rectF = new RectF(new Rect(0, 0, widthLight, heightLight));
+
+        canvas.drawRoundRect(rectF, widthLight / 2 ,heightLight / 2,paintColor);
+
+        Paint paintImage = new Paint();
+        paintImage.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
+        canvas.drawBitmap(bitmap, 0, 0, paintImage);
+
+        return output;
     }
 }
