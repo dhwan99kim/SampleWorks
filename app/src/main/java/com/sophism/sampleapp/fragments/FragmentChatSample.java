@@ -220,13 +220,15 @@ public class FragmentChatSample extends Fragment {
     private Emitter.Listener onConnectError = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getActivity().getApplicationContext(),
-                            "접속 실패", Toast.LENGTH_LONG).show();
-                }
-            });
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getActivity().getApplicationContext(),
+                                "접속 실패", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
         }
     };
 
