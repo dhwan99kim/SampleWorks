@@ -3,6 +3,8 @@ package com.sophism.sampleapp.fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -11,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +28,7 @@ import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.sophism.sampleapp.AppDefine;
+import com.sophism.sampleapp.ChatDatabaseHelper;
 import com.sophism.sampleapp.R;
 import com.sophism.sampleapp.data.ChatMessage;
 
@@ -40,8 +44,10 @@ import java.util.List;
  */
 public class FragmentChatSample extends Fragment {
 
+    private static final String TAG = "FragmentChatSample";
     private static final int TYPING_TIMER_LENGTH = 600;
 
+    private Context mContext;
     private RecyclerView mMessagesView;
     private EditText mInputMessageView;
     private List<ChatMessage> mMessages = new ArrayList<>();
@@ -49,6 +55,7 @@ public class FragmentChatSample extends Fragment {
     private boolean mTyping = false;
     private Handler mTypingHandler = new Handler();
     private String mUsername = "sophism";
+    private String mRoomId = "room1";
     private Socket mSocket;
     {
         try {
@@ -74,6 +81,7 @@ public class FragmentChatSample extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mAdapter = new MessageAdapter(activity, mMessages);
+        mContext = activity;
     }
 
     @Override
@@ -98,7 +106,8 @@ public class FragmentChatSample extends Fragment {
         mSocket.connect();
 
         mSocket.emit("add user", mUsername);
-        mSocket.emit("join","room1");
+        mSocket.emit("join",mRoomId);
+
     }
 
     @Override
@@ -151,6 +160,8 @@ public class FragmentChatSample extends Fragment {
                 attemptSend();
             }
         });
+
+        getMessages(mRoomId);
     }
 
     private void addLog(String message) {
@@ -204,7 +215,8 @@ public class FragmentChatSample extends Fragment {
         addMessage(mUsername, message);
 
         // perform the sending message attempt.
-        mSocket.emit("new message", message, "room1");
+        mSocket.emit("new message", message, mRoomId);
+        insertDB(mUsername,mUsername,mRoomId,message);
     }
 
     private void leave() {
@@ -250,6 +262,8 @@ public class FragmentChatSample extends Fragment {
 
                     removeTyping(username);
                     addMessage(username, message);
+                    insertDB(username, username, mRoomId, message);
+
                 }
             });
         }
@@ -429,5 +443,30 @@ public class FragmentChatSample extends Fragment {
                 return mUsernameColors[index];
             }
         }
+    }
+
+    private void insertDB(String id, String name, String roomId, String message){
+        ChatDatabaseHelper helper = new ChatDatabaseHelper(mContext,ChatDatabaseHelper.DATABASE_NAME, null, ChatDatabaseHelper.DATABASE_VERSION);
+        helper.open();
+        helper.insert(id, name, roomId, message);
+        helper.close();
+    }
+
+    private void getMessages(String roomId){
+        Log.d(TAG,"getMessage;");
+        ChatDatabaseHelper helper = new ChatDatabaseHelper(mContext,ChatDatabaseHelper.DATABASE_NAME, null, ChatDatabaseHelper.DATABASE_VERSION);
+        helper.open();
+        Cursor cursor = helper.getMessages(roomId);
+        cursor.moveToFirst();
+
+        while(!cursor.isAfterLast()){
+            String id = cursor.getString(0);
+            String message = cursor.getString(1);
+            addMessage(id,message);
+            cursor.moveToNext();
+        }
+        if (cursor != null)
+        cursor.close();
+        helper.close();
     }
 }
