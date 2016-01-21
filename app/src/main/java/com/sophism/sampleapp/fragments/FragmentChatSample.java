@@ -247,110 +247,120 @@ public class FragmentChatSample extends Fragment {
     private Emitter.Listener onNewMessage = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject data = (JSONObject) args[0];
-                    String username;
-                    String message;
-                    try {
-                        username = data.getString("username");
-                        message = data.getString("message");
-                    } catch (JSONException e) {
-                        return;
+            if (getActivity()!= null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        JSONObject data = (JSONObject) args[0];
+                        String username;
+                        String message;
+                        try {
+                            username = data.getString("username");
+                            message = data.getString("message");
+                        } catch (JSONException e) {
+                            return;
+                        }
+
+                        removeTyping(username);
+                        addMessage(username, message);
+                        insertDB(username, username, mRoomId, message);
+
                     }
-
-                    removeTyping(username);
-                    addMessage(username, message);
-                    insertDB(username, username, mRoomId, message);
-
-                }
-            });
+                });
+            }
         }
     };
 
     private Emitter.Listener onUserJoined = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject data = (JSONObject) args[0];
-                    String username;
-                    int numUsers;
-                    try {
-                        username = data.getString("username");
-                        numUsers = data.getInt("numUsers");
-                    } catch (JSONException e) {
-                        return;
-                    }
+            if (getActivity()!= null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        JSONObject data = (JSONObject) args[0];
+                        String username;
+                        int numUsers;
+                        try {
+                            username = data.getString("username");
+                            numUsers = data.getInt("numUsers");
+                        } catch (JSONException e) {
+                            return;
+                        }
 
-                    addLog(username+"님이 입장하였습니다");
-                    addParticipantsLog(numUsers);
-                }
-            });
+                        addLog(username + "님이 입장하였습니다");
+                        addParticipantsLog(numUsers);
+                    }
+                });
+            }
         }
     };
 
     private Emitter.Listener onUserLeft = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject data = (JSONObject) args[0];
-                    String username;
-                    int numUsers;
-                    try {
-                        username = data.getString("username");
-                        numUsers = data.getInt("numUsers");
-                    } catch (JSONException e) {
-                        return;
-                    }
+            if (getActivity()!= null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        JSONObject data = (JSONObject) args[0];
+                        String username;
+                        int numUsers;
+                        try {
+                            username = data.getString("username");
+                            numUsers = data.getInt("numUsers");
+                        } catch (JSONException e) {
+                            return;
+                        }
 
-                    addLog(username+"님이 퇴장하였습니다");
-                    addParticipantsLog(numUsers);
-                    removeTyping(username);
-                }
-            });
+                        addLog(username + "님이 퇴장하였습니다");
+                        addParticipantsLog(numUsers);
+                        removeTyping(username);
+                    }
+                });
+            }
         }
     };
 
     private Emitter.Listener onTyping = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject data = (JSONObject) args[0];
-                    String username;
-                    try {
-                        username = data.getString("username");
-                    } catch (JSONException e) {
-                        return;
+            if (getActivity()!= null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        JSONObject data = (JSONObject) args[0];
+                        String username;
+                        try {
+                            username = data.getString("username");
+                        } catch (JSONException e) {
+                            return;
+                        }
+                        addTyping(username);
                     }
-                    addTyping(username);
-                }
-            });
+                });
+            }
         }
     };
 
     private Emitter.Listener onStopTyping = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject data = (JSONObject) args[0];
-                    String username;
-                    try {
-                        username = data.getString("username");
-                    } catch (JSONException e) {
-                        return;
+            if (getActivity()!= null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        JSONObject data = (JSONObject) args[0];
+                        String username;
+                        try {
+                            username = data.getString("username");
+                        } catch (JSONException e) {
+                            return;
+                        }
+                        removeTyping(username);
                     }
-                    removeTyping(username);
-                }
-            });
+                });
+            }
         }
     };
 
