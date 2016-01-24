@@ -10,14 +10,14 @@ import java.io.InputStream;
 
 public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     ImageView bmImage;
-    LruCache cache;
+    LruCache<String, Bitmap> cache;
     boolean isRounded;
-    public DownloadImageTask(ImageView bmImage, LruCache cache) {
+    public DownloadImageTask(ImageView bmImage, LruCache<String, Bitmap> cache) {
         this.bmImage = bmImage;
         this.cache = cache;
         isRounded = false;
     }
-    public DownloadImageTask(ImageView bmImage, LruCache cache, boolean isRounded) {
+    public DownloadImageTask(ImageView bmImage, LruCache<String, Bitmap> cache, boolean isRounded) {
         this.bmImage = bmImage;
         this.cache = cache;
         this.isRounded = isRounded;
