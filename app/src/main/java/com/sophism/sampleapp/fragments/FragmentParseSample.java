@@ -2,13 +2,17 @@ package com.sophism.sampleapp.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.parse.ParseException;
@@ -27,6 +31,9 @@ public class FragmentParseSample extends Fragment implements View.OnClickListene
     final String TAG = "FragmentMain";
     private EditText mInPutEditText;
     private TextView mInPutResult;
+    Handler mHandler;
+    ScrollView scrollView;
+    int bannerId=0;
     public FragmentParseSample() {
 
     }
@@ -61,8 +68,33 @@ public class FragmentParseSample extends Fragment implements View.OnClickListene
         Button input_submit_btn = (Button) rootView.findViewById(R.id.input_submit_btn);
         input_submit_btn.setOnClickListener(this);
 
+        scrollView = (ScrollView) rootView.findViewById(R.id.scroll);
+        scrollView.setOnTouchListener(null);
+        rollBanner();
         return rootView;
     }
+
+    private void rollBanner(){
+        mHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                scrollView.smoothScrollTo(0,msg.what*240);
+
+            }
+        };
+        mHandler.postDelayed(rollBanner, 2000);
+    }
+
+    private Runnable rollBanner = new Runnable() {
+        public void run() {
+            if (bannerId >1)
+                bannerId = 0;
+            else
+                bannerId += 1;
+            mHandler.sendEmptyMessage(bannerId);
+            mHandler.postDelayed(this, 2000);
+        }
+    };
 
     @Override
     public void onClick(View v) {
