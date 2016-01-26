@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
@@ -53,6 +54,9 @@ public class MainActivity extends Activity implements View.OnClickListener{
         TextView menu_item_chat = (TextView) findViewById(R.id.menu_item_chat);
         menu_item_chat.setOnClickListener(this);
 
+        TextView menu_item_chat_ver2 = (TextView) findViewById(R.id.menu_item_chat_ver2);
+        menu_item_chat_ver2.setOnClickListener(this);
+
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         mFragment = new FragmentParseSample();
@@ -84,6 +88,11 @@ public class MainActivity extends Activity implements View.OnClickListener{
                 break;
             case R.id.menu_item_chat:
                 changeFragmentFromSideMenu(new FragmentChatSample());
+                break;
+            case R.id.menu_item_chat_ver2:
+                Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 

@@ -11,7 +11,8 @@
         android:text="Parse.com Sample"/>
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_weight="1">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -76,6 +77,28 @@
                     android:text="SUBMIT"/>
             </LinearLayout>
 
+        </LinearLayout>
+    </ScrollView>
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="80dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="@color/btn_color_blue"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="@color/white"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="@color/black"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
