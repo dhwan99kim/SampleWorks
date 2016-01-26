@@ -30,6 +30,7 @@ import com.github.nkzawa.socketio.client.Socket;
 import com.sophism.sampleapp.AppDefine;
 import com.sophism.sampleapp.ChatDatabaseHelper;
 import com.sophism.sampleapp.R;
+import com.sophism.sampleapp.SocketService;
 import com.sophism.sampleapp.data.ChatMessage;
 
 import org.json.JSONException;
@@ -56,14 +57,7 @@ public class FragmentChatSample extends Fragment {
     private Handler mTypingHandler = new Handler();
     private String mUsername = "sophism";
     private String mRoomId = "room1";
-    private Socket mSocket;
-    {
-        try {
-            mSocket = IO.socket(AppDefine.CHAT_SERVER_URL);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private Socket mSocket = SocketService.mSocket;
 
     @Nullable
     @Override

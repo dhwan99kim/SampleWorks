@@ -35,7 +35,15 @@
         <activity android:name="com.nhn.android.naverlogin.ui.OAuthLoginInAppBrowserActivity"
             android:label="OAuth2.0 In-app"/>
 
+        <service android:name=".SocketService"/>
         <service android:name="com.parse.PushService" />
+
+        <receiver android:name=".SampleReceiver">
+            <intent-filter>
+                <action
+                    android:name="ANDROID.INTENT.ACTION.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
         <receiver android:name="com.parse.ParsePushBroadcastReceiver"
             android:exported="false">
             <intent-filter>
