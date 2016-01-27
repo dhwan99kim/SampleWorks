@@ -22,8 +22,6 @@ import com.sophism.sampleapp.AppDefine;
 import com.sophism.sampleapp.R;
 import com.sophism.sampleapp.dialogs.DialogInputText;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,12 +31,10 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.converter.GsonConverter;
-import retrofit.http.Body;
+import retrofit.http.DELETE;
 import retrofit.http.GET;
-import retrofit.http.Headers;
 import retrofit.http.POST;
-import retrofit.mime.TypedByteArray;
-import retrofit.mime.TypedInput;
+import retrofit.http.Path;
 
 /**
  * Created by D.H.KIM on 2016. 1. 25.
@@ -91,7 +87,7 @@ public class FragmentChatFriendList extends Fragment{
                 .build();
 
         try {
-            restAdapter.create(GetFriendListService.class).friendsItems(new Callback<List<Friend>>() {
+            restAdapter.create(GetFriendListService.class).friendsItems("sophism",new Callback<List<Friend>>() {
 
                 @Override
                 public void success(List<Friend> friends, Response response) {
@@ -120,21 +116,38 @@ public class FragmentChatFriendList extends Fragment{
                 .setEndpoint(AppDefine.CHAT_SERVER_URL)
                 .setConverter(new GsonConverter(gson))
                 .build();
-        JSONObject object = new JSONObject();
         try {
-            object.put("myId", myId);
-            object.put("targetId", targetId);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        String json = object.toString();
-        try {
-            TypedInput in = new TypedByteArray("application/json", json.getBytes("UTF-8"));
-            restAdapter.create(AddFriendListService.class).addFriend(in, new Callback<Friend>() {
+            restAdapter.create(AddFriendListService.class).addFriend(myId,targetId, new Callback<Friend>() {
 
                 @Override
                 public void success(Friend friend, Response response) {
-                    Log.d(TAG,"Success");
+                    Log.d(TAG, "add Success");
+                    getFriendList();
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.e(TAG, error.toString());
+                }
+            });
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void delFriendList(String myId, String targetId){
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setEndpoint(AppDefine.CHAT_SERVER_URL)
+                .setConverter(new GsonConverter(gson))
+                .build();
+        try {
+
+            restAdapter.create(DeleteFriendListService.class).deleteFriend(myId,targetId, new Callback<Friend>() {
+
+                @Override
+                public void success(Friend friend, Response response) {
+                    Log.d(TAG, "delete Success");
                     getFriendList();
                 }
 
@@ -153,22 +166,30 @@ public class FragmentChatFriendList extends Fragment{
         public String friend;
     }
     public interface GetFriendListService {
-
-        @GET("/friends/sophism")
+        @GET("/friends/{id}")
         void friendsItems(
-                Callback <List<Friend>> callback
+                @Path("id") String id, Callback <List<Friend>> callback
         );
     }
 
     public interface AddFriendListService {
-
-        @POST("/friends/sophism")
-        @Headers({"Content-Type: application/json;charset=UTF-8"})
+        @POST("/friends/{id}/{target}")
+        //@Headers({"Content-Type: application/json;charset=UTF-8"})
         void addFriend(
-                @Body TypedInput object,
+                //@Body TypedInput object,
+                @Path("id")String id, @Path("target")String targetId,
                 Callback<Friend> callback
         );
     }
+
+    public interface DeleteFriendListService {
+        @DELETE("/friends/{id}/{target}")
+        void deleteFriend(
+                @Path("id")String id, @Path("target")String targetId,
+                Callback<Friend> target
+        );
+    }
+
     public class FriendListAdapter extends BaseAdapter
 
     {
@@ -194,7 +215,7 @@ public class FragmentChatFriendList extends Fragment{
     }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
@@ -205,6 +226,12 @@ public class FragmentChatFriendList extends Fragment{
             holder = (ViewHolder) convertView.getTag();
         }
         holder.chat_friend_name.setText(mFriendList.get(position));
+        holder.chat_friend_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delFriendList("sophism",mFriendList.get(position));
+            }
+        });
         return convertView;
     }
 
