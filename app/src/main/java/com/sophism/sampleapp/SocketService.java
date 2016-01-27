@@ -1,18 +1,20 @@
 package com.sophism.sampleapp;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
@@ -52,7 +54,17 @@ public class SocketService extends Service{
             Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(mContext,"New Message",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext,"New Message",Toast.LENGTH_SHORT).show();
+                    JSONObject data = (JSONObject) args[0];
+                    /*String username;
+                    String message;
+                    try {
+                        username = data.getString("username");
+                        message = data.getString("message");
+                    } catch (JSONException e) {
+                        return;
+                    }*/
+                    generateChatNotification(mContext,data);
                 }
             };
             mHandler.post(runnable);
@@ -72,7 +84,21 @@ public class SocketService extends Service{
         return null;
     }
 
-    private void runOnUiThread(Runnable runnable) {
-        mHandler.post(runnable);
+    private void generateChatNotification(Context context, JSONObject object) {
+        try {
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.putExtra("isFromChatNoti",true);
+            PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+            NotificationManager mNotifM = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.mipmap.ic_launcher).setContentTitle(object.getString("username")).setContentText(object.getString("message")).setAutoCancel(true);
+
+            mBuilder.setContentIntent(contentIntent);
+            mNotifM.notify(1, mBuilder.build());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
     }
 }

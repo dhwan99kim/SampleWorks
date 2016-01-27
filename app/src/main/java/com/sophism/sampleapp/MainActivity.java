@@ -60,7 +60,12 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        mFragment = new FragmentParseSample();
+        if (getIntent().getBooleanExtra("isFromChatNoti",false)) {
+            mFragment = new FragmentChatSample();
+        }else{
+            mFragment = new FragmentParseSample();
+        }
+
         ft.replace(R.id.content_frame, mFragment);
         ft.commit();
     }

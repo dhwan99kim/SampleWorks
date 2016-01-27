@@ -81,7 +81,7 @@ public class FragmentChatSample extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        leave();
+        //leave();
     }
 
     @Override
@@ -216,7 +216,6 @@ public class FragmentChatSample extends Fragment {
     private void leave() {
         mUsername = null;
         mSocket.disconnect();
-        mSocket.connect();
     }
 
     private void scrollToBottom() {
