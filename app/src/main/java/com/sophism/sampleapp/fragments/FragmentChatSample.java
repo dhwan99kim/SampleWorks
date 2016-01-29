@@ -97,10 +97,12 @@ public class FragmentChatSample extends Fragment {
         mSocket.on("user left", onUserLeft);
         mSocket.on("typing", onTyping);
         mSocket.on("stop typing", onStopTyping);
+        mSocket.on("invite",onInvite);
         mSocket.connect();
 
         mSocket.emit("add user", mUsername);
         mSocket.emit("join",mRoomId);
+
 
     }
 
@@ -229,8 +231,8 @@ public class FragmentChatSample extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getActivity().getApplicationContext(),
-                                "접속 실패", Toast.LENGTH_LONG).show();
+                        /*Toast.makeText(getActivity().getApplicationContext(),
+                                "접속 실패", Toast.LENGTH_LONG).show();*/
                     }
                 });
             }
@@ -367,6 +369,19 @@ public class FragmentChatSample extends Fragment {
         }
     };
 
+    private Emitter.Listener onInvite = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            int room = (int) args[0];
+            /*String roomId;
+            try {
+                roomId = data.getString("roomId");
+            } catch (JSONException e) {
+                return;
+            }*/
+            mSocket.emit("join",room);
+        }
+    };
 
     public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 

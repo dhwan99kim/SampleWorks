@@ -14,12 +14,14 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.github.nkzawa.socketio.client.Socket;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.bind.DateTypeAdapter;
 import com.sophism.sampleapp.AppDefine;
 import com.sophism.sampleapp.R;
+import com.sophism.sampleapp.SocketService;
 import com.sophism.sampleapp.dialogs.DialogInputText;
 
 import java.util.ArrayList;
@@ -44,7 +46,7 @@ public class FragmentChatFriendList extends Fragment{
     private final String TAG = "FragmentChatFriendList";
     private ArrayList<String> mFriendList;
     private FriendListAdapter mAdapter;
-
+    private Socket mSocket = SocketService.mSocket;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_friend_list, container, false);
@@ -229,7 +231,8 @@ public class FragmentChatFriendList extends Fragment{
         holder.chat_friend_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                delFriendList("sophism",mFriendList.get(position));
+                //delFriendList("sophism",mFriendList.get(position));
+                mSocket.emit("invite",mFriendList.get(position));
             }
         });
         return convertView;
