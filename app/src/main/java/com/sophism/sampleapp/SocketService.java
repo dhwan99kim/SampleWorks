@@ -40,6 +40,7 @@ public class SocketService extends Service{
         Toast.makeText(this,"Socket Service Started",Toast.LENGTH_SHORT).show();
         try {
             mSocket = IO.socket(AppDefine.CHAT_SERVER_URL);
+            mSocket.emit("room connect");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -54,16 +55,7 @@ public class SocketService extends Service{
             Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
-                    //Toast.makeText(mContext,"New Message",Toast.LENGTH_SHORT).show();
                     JSONObject data = (JSONObject) args[0];
-                    /*String username;
-                    String message;
-                    try {
-                        username = data.getString("username");
-                        message = data.getString("message");
-                    } catch (JSONException e) {
-                        return;
-                    }*/
                     generateChatNotification(mContext,data);
                 }
             };

@@ -79,7 +79,6 @@ public class FragmentChatFriendList extends Fragment{
             }
         });
         getFriendList();
-        mSocket.emit("room connect");
 
         mSocket.on("open room", onOpenRoom);
         return rootView;
