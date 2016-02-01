@@ -3,6 +3,7 @@ package com.sophism.sampleapp.fragments;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,15 +15,20 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.bind.DateTypeAdapter;
 import com.sophism.sampleapp.AppDefine;
+import com.sophism.sampleapp.ChatActivity;
+import com.sophism.sampleapp.MainActivity;
 import com.sophism.sampleapp.R;
 import com.sophism.sampleapp.SocketService;
 import com.sophism.sampleapp.dialogs.DialogInputText;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -73,9 +79,29 @@ public class FragmentChatFriendList extends Fragment{
             }
         });
         getFriendList();
+        mSocket.emit("room connect");
+
+        mSocket.on("open room", onOpenRoom);
         return rootView;
     }
+    private Emitter.Listener onOpenRoom = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            if (getActivity()!= null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        int roomId = (Integer)args[0];
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        intent.putExtra("isFromChatNoti",true);
+                        intent.putExtra("room",roomId);
+                        startActivity(intent);
 
+                    }
+                });
+            }
+        }
+    };
     Gson gson = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .registerTypeAdapter(Date.class, new DateTypeAdapter())
@@ -233,6 +259,7 @@ public class FragmentChatFriendList extends Fragment{
             public void onClick(View v) {
                 //delFriendList("sophism",mFriendList.get(position));
                 mSocket.emit("invite",mFriendList.get(position));
+
             }
         });
         return convertView;

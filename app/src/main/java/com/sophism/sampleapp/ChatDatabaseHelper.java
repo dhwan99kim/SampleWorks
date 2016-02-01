@@ -50,7 +50,7 @@ public class ChatDatabaseHelper extends SQLiteOpenHelper {
         mDB.close();
     }
 
-    public void insert(String id, String name, String room_id, String message){
+    public void insert(String id, String name, int room_id, String message){
         if (mDB != null) {
             ContentValues values = new ContentValues();
             values.put("id", id);
@@ -61,7 +61,7 @@ public class ChatDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public Cursor getMessages(String roomId){
+    public Cursor getMessages(int roomId){
         String sql = "select id, message from " + TABLE_NAME + " where room_id ='"+roomId+ "';";
         Cursor results = mDB.rawQuery(sql, null);
         return results;

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -22,12 +21,9 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.nkzawa.emitter.Emitter;
-import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
-import com.sophism.sampleapp.AppDefine;
 import com.sophism.sampleapp.ChatDatabaseHelper;
 import com.sophism.sampleapp.R;
 import com.sophism.sampleapp.SocketService;
@@ -36,7 +32,6 @@ import com.sophism.sampleapp.data.ChatMessage;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +42,7 @@ public class FragmentChatSample extends Fragment {
 
     private static final String TAG = "FragmentChatSample";
     private static final int TYPING_TIMER_LENGTH = 600;
-
+    private static final int INVALID = -1;
     private Context mContext;
     private RecyclerView mMessagesView;
     private EditText mInputMessageView;
@@ -56,7 +51,7 @@ public class FragmentChatSample extends Fragment {
     private boolean mTyping = false;
     private Handler mTypingHandler = new Handler();
     private String mUsername = "sophism";
-    private String mRoomId = "room1";
+    private int mRoomId = INVALID;
     private Socket mSocket = SocketService.mSocket;
 
     @Nullable
@@ -99,6 +94,14 @@ public class FragmentChatSample extends Fragment {
         mSocket.on("stop typing", onStopTyping);
         mSocket.on("invite",onInvite);
         mSocket.connect();
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null){
+            int roomID = bundle.getInt("room",INVALID);
+            if (roomID != INVALID){
+                mRoomId = roomID;
+            }
+        }
 
         mSocket.emit("add user", mUsername);
         mSocket.emit("join",mRoomId);
@@ -379,6 +382,7 @@ public class FragmentChatSample extends Fragment {
             } catch (JSONException e) {
                 return;
             }*/
+            mRoomId = room;
             mSocket.emit("join",room);
         }
     };
@@ -463,14 +467,14 @@ public class FragmentChatSample extends Fragment {
         }
     }
 
-    private void insertDB(String id, String name, String roomId, String message){
+    private void insertDB(String id, String name, int roomId, String message){
         ChatDatabaseHelper helper = new ChatDatabaseHelper(mContext,ChatDatabaseHelper.DATABASE_NAME, null, ChatDatabaseHelper.DATABASE_VERSION);
         helper.open();
         helper.insert(id, name, roomId, message);
         helper.close();
     }
 
-    private void getMessages(String roomId){
+    private void getMessages(int roomId){
         Log.d(TAG,"getMessage;");
         ChatDatabaseHelper helper = new ChatDatabaseHelper(mContext,ChatDatabaseHelper.DATABASE_NAME, null, ChatDatabaseHelper.DATABASE_VERSION);
         helper.open();

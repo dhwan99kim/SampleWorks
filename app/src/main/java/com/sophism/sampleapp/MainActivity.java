@@ -62,6 +62,9 @@ public class MainActivity extends Activity implements View.OnClickListener{
         FragmentTransaction ft = fm.beginTransaction();
         if (getIntent().getBooleanExtra("isFromChatNoti",false)) {
             mFragment = new FragmentChatSample();
+            Bundle bundle = new Bundle();
+            bundle.putInt("room",getIntent().getIntExtra("room",-1));
+            mFragment.setArguments(bundle);
         }else{
             mFragment = new FragmentParseSample();
         }
