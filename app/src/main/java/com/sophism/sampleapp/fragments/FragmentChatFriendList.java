@@ -90,7 +90,7 @@ public class FragmentChatFriendList extends Fragment{
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        int roomId = (Integer)args[0];
+                        int roomId = Integer.valueOf(args[0].toString());
                         Intent intent = new Intent(getActivity(), MainActivity.class);
                         intent.putExtra("isFromChatNoti",true);
                         intent.putExtra("room",roomId);

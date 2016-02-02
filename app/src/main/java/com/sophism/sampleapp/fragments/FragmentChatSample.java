@@ -375,7 +375,8 @@ public class FragmentChatSample extends Fragment {
     private Emitter.Listener onInvite = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            int room = (int) args[0];
+            int room = Integer.valueOf(args[0].toString());
+            Log.d("Donghwan","invited to"+room);
             /*String roomId;
             try {
                 roomId = data.getString("roomId");
