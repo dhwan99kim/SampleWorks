@@ -29,7 +29,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startService(new Intent(this, SocketService.class));
+
         setContentView(R.layout.activity_main);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -67,6 +67,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
             mFragment.setArguments(bundle);
         }else{
             mFragment = new FragmentParseSample();
+            startService(new Intent(this, SocketService.class));
         }
 
         ft.replace(R.id.content_frame, mFragment);
