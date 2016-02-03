@@ -263,7 +263,7 @@ public class FragmentChatSample extends Fragment {
                         removeTyping(username);
                         if (roomId == mRoomId)
                             addMessage(username, message);
-                        insertDB(username, username, mRoomId, message);
+                        insertDB(username, username, roomId, message);
 
                     }
                 });
