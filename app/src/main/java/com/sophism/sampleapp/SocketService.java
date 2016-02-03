@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.github.nkzawa.emitter.Emitter;
@@ -26,6 +27,8 @@ public class SocketService extends Service{
     static public Socket mSocket;
     private Context mContext;
     private Handler mHandler;
+    private String mUsername = "sophism";
+    boolean isDisconnectFirstEvent = true;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -40,11 +43,17 @@ public class SocketService extends Service{
         Toast.makeText(this,"Socket Service Started",Toast.LENGTH_SHORT).show();
         try {
             mSocket = IO.socket(AppDefine.CHAT_SERVER_URL);
-            mSocket.emit("room connect");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
         mSocket.on("new message", onNewMessage);
+        mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
+        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+        mSocket.connect();
+        Log.d("Donghwan","add user from Socket Service");
+        mSocket.emit("add user", mUsername);
+        //mSocket.emit("room connect");
         return START_STICKY;
 
     }
@@ -61,6 +70,64 @@ public class SocketService extends Service{
             };
             mHandler.post(runnable);
 
+        }
+    };
+
+    private Emitter.Listener onDisconnect = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            if (isDisconnectFirstEvent) {
+                isDisconnectFirstEvent = false;
+                Log.d("Donghwan", "onDisconnect");
+                try {
+                    mSocket = IO.socket(AppDefine.CHAT_SERVER_URL);
+                } catch (URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
+                mSocket.on("new message", onNewMessage);
+                mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
+                mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+                mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+                mSocket.on(Socket.EVENT_CONNECT, onConnect);
+                mSocket.connect();
+
+            }
+        }
+    };
+
+    private Emitter.Listener onConnectError = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            Log.d("Donghwan", "onConnectError");
+
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        mSocket = IO.socket(AppDefine.CHAT_SERVER_URL);
+                    } catch (URISyntaxException e) {
+                        throw new RuntimeException(e);
+                    }
+                    mSocket.on("new message", onNewMessage);
+                    mSocket.on(Socket.EVENT_DISCONNECT,onDisconnect);
+                    mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+                    mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+                    mSocket.connect();
+                }
+            };
+            mHandler.postDelayed(runnable, 5000);
+
+
+        }
+    };
+
+    private Emitter.Listener onConnect = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            isDisconnectFirstEvent = true;
+            Log.d("Donghwan","onConnect");
+            Log.d("Donghwan","add user from Socket Service add user");
+            mSocket.emit("add user", mUsername);
 
         }
     };

@@ -84,7 +84,6 @@ public class FragmentChatSample extends Fragment {
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
-
         mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
         mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
         mSocket.on("new message", onNewMessage);
@@ -103,8 +102,8 @@ public class FragmentChatSample extends Fragment {
             }
         }
 
-        mSocket.emit("add user", mUsername);
-        mSocket.emit("join",mRoomId);
+        //mSocket.emit("add user", mUsername);
+        //mSocket.emit("join",mRoomId);
 
 
     }
@@ -252,15 +251,18 @@ public class FragmentChatSample extends Fragment {
                         JSONObject data = (JSONObject) args[0];
                         String username;
                         String message;
+                        int roomId;
                         try {
                             username = data.getString("username");
                             message = data.getString("message");
+                            roomId =  Integer.parseInt(data.getString("roomId"));
                         } catch (JSONException e) {
                             return;
                         }
 
                         removeTyping(username);
-                        addMessage(username, message);
+                        if (roomId == mRoomId)
+                            addMessage(username, message);
                         insertDB(username, username, mRoomId, message);
 
                     }
