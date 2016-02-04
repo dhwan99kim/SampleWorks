@@ -24,6 +24,9 @@ import com.sophism.sampleapp.MainActivity;
 import com.sophism.sampleapp.R;
 import com.sophism.sampleapp.SocketService;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -54,6 +57,7 @@ public class FragmentChatMessagingList extends Fragment{
         listview_friend.setAdapter(mAdapter);
         getRoomList();
         mSocket.on("open room", onOpenRoom);
+        mSocket.on("new message", onNewMessage);
         return rootView;
     }
 
@@ -70,6 +74,39 @@ public class FragmentChatMessagingList extends Fragment{
                         intent.putExtra("room",roomId);
                         startActivity(intent);
 
+                    }
+                });
+            }
+        }
+    };
+
+    private Emitter.Listener onNewMessage = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            if (getActivity()!= null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        JSONObject data = (JSONObject) args[0];
+                        String message;
+                        String roomId;
+                        try {
+                            message = data.getString("message");
+                            roomId =  data.getString("roomId");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            return;
+                        }
+                        for (int i=0;i<mRoomList.size();i++){
+                            MessagingRoomInfo info = mRoomList.get(i);
+                            if(info.room_id.equals(roomId)) {
+                                info.updateMessage(message);
+                                mRoomList.set(i, info);
+                            }
+                            mAdapter.notifyDataSetChanged();
+
+                        }
                     }
                 });
             }
@@ -178,5 +215,9 @@ public class FragmentChatMessagingList extends Fragment{
         String member;
         String room_id;
         String message;
+
+        public void updateMessage(String message){
+            this.message = message;
+        }
     }
 }
