@@ -54,7 +54,6 @@ public class SocketService extends Service{
         mSocket.connect();
         Log.d("Donghwan","add user from Socket Service");
         mSocket.emit("add user", mUsername);
-        //mSocket.emit("room connect");
         return START_STICKY;
 
     }
@@ -79,7 +78,6 @@ public class SocketService extends Service{
                         e.printStackTrace();
                         return;
                     }
-                    Log.d("Donghwan","GetMessage "+username+" "+roomId+" "+message);
                     insertDB(username, username, roomId, message);
                 }
             };
@@ -99,11 +97,6 @@ public class SocketService extends Service{
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
                 }
-                mSocket.on("new message", onNewMessage);
-                mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
-                mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
-                mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
-                mSocket.on(Socket.EVENT_CONNECT, onConnect);
                 mSocket.connect();
 
             }
@@ -123,10 +116,6 @@ public class SocketService extends Service{
                     } catch (URISyntaxException e) {
                         throw new RuntimeException(e);
                     }
-                    mSocket.on("new message", onNewMessage);
-                    mSocket.on(Socket.EVENT_DISCONNECT,onDisconnect);
-                    mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
-                    mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
                     mSocket.connect();
                 }
             };
