@@ -244,10 +244,12 @@ public class FragmentChatSample extends Fragment {
     private Emitter.Listener onNewMessage = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
+            Log.d("Donghwan","GetMessage");
             if (getActivity()!= null) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         JSONObject data = (JSONObject) args[0];
                         String username;
                         String message;
@@ -257,14 +259,12 @@ public class FragmentChatSample extends Fragment {
                             message = data.getString("message");
                             roomId =  Integer.parseInt(data.getString("roomId"));
                         } catch (JSONException e) {
+                            e.printStackTrace();
                             return;
                         }
-
                         removeTyping(username);
                         if (roomId == mRoomId)
                             addMessage(username, message);
-                        insertDB(username, username, roomId, message);
-
                     }
                 });
             }
@@ -469,6 +469,7 @@ public class FragmentChatSample extends Fragment {
             }
         }
     }
+
 
     private void insertDB(String id, String name, int roomId, String message){
         ChatDatabaseHelper helper = new ChatDatabaseHelper(mContext,ChatDatabaseHelper.DATABASE_NAME, null, ChatDatabaseHelper.DATABASE_VERSION);

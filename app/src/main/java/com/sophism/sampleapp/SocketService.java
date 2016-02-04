@@ -16,6 +16,7 @@ import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
@@ -66,6 +67,20 @@ public class SocketService extends Service{
                 public void run() {
                     JSONObject data = (JSONObject) args[0];
                     generateChatNotification(mContext,data);
+
+                    String username;
+                    String message;
+                    int roomId;
+                    try {
+                        username = data.getString("username");
+                        message = data.getString("message");
+                        roomId =  Integer.parseInt(data.getString("roomId"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+                    Log.d("Donghwan","GetMessage "+username+" "+roomId+" "+message);
+                    insertDB(username, username, roomId, message);
                 }
             };
             mHandler.post(runnable);
@@ -159,5 +174,12 @@ public class SocketService extends Service{
             e.printStackTrace();
         }
 
+    }
+
+    private void insertDB(String id, String name, int roomId, String message){
+        ChatDatabaseHelper helper = new ChatDatabaseHelper(mContext,ChatDatabaseHelper.DATABASE_NAME, null, ChatDatabaseHelper.DATABASE_VERSION);
+        helper.open();
+        helper.insert(id, name, roomId, message);
+        helper.close();
     }
 }
